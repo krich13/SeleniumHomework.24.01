@@ -55,8 +55,8 @@ public class WebTestCardAplicationStep1 {
         driver.findElement(By.cssSelector("[name= 'phone']")).sendKeys("+79119418601");
         driver.findElement(By.className("checkbox__box")).click();
         driver.findElement(By.tagName("button")).click();
-        String actualMessage = driver.findElement(By.className("input__sub")).getText(); //поиск элемента по классу
-        //String actualMessage = driver.findElement(By.cssSelector("[data-test-id='name'].input_theme_alfa-on-white.input__sub")).getText(); //по элементу не могу найти
+        //String actualMessage = driver.findElement(By.className("input_invalid input_theme_alfa-on-white .input__sub")).getText(); //поиск элемента по классу
+        String actualMessage = driver.findElement(By.cssSelector("[data-test-id='name'] .input__sub")).getText();
         String expectedMessage = "Имя и Фамилия указаные неверно. Допустимы только русские буквы, пробелы и дефисы.";
         Assertions.assertEquals(expectedMessage, actualMessage.strip());
     }
@@ -67,7 +67,8 @@ public class WebTestCardAplicationStep1 {
         driver.findElement(By.cssSelector("[name= 'phone']")).sendKeys("+791194186011");
         driver.findElement(By.className("checkbox__box")).click();
         driver.findElement(By.tagName("button")).click();
-        String actualMessage = driver.findElement(By.xpath("/html/body/div[1]/div/form/div[2]/span/span/span[3]")).getText();
+        //String actualMessage = driver.findElement(By.xpath("/html/body/div[1]/div/form/div[2]/span/span/span[3]")).getText();
+        String actualMessage = driver.findElement(By.cssSelector("[data-test-id='phone'] .input__sub")).getText();
         String expectedMessage = "Телефон указан неверно. Должно быть 11 цифр, например, +79012345678.";
         assertEquals(expectedMessage, actualMessage.strip());
     }
@@ -79,7 +80,8 @@ public class WebTestCardAplicationStep1 {
         driver.findElement(By.cssSelector("[name= 'phone']")).sendKeys("+7");
         driver.findElement(By.className("checkbox__box")).click();
         driver.findElement(By.tagName("button")).click();
-        String actualMessage = driver.findElement(By.xpath("/html/body/div[1]/div/form/div[2]/span/span/span[3]")).getText();
+        //String actualMessage = driver.findElement(By.xpath("/html/body/div[1]/div/form/div[2]/span/span/span[3]")).getText();
+        String actualMessage = driver.findElement(By.cssSelector("[data-test-id='phone'] .input__sub")).getText();
         String expectedMessage = "Телефон указан неверно. Должно быть 11 цифр, например, +79012345678.";
         Assertions.assertEquals(expectedMessage, actualMessage.strip());
     }
@@ -90,22 +92,34 @@ public class WebTestCardAplicationStep1 {
         driver.findElement(By.cssSelector("[name= 'phone']")).sendKeys("8908209093");
         driver.findElement(By.className("checkbox__box")).click();
         driver.findElement(By.tagName("button")).click();
-        String actualMessage = driver.findElement(By.xpath("/html/body/div[1]/div/form/div[2]/span/span/span[3]")).getText();
+        String actualMessage = driver.findElement(By.cssSelector("[data-test-id='phone'] .input__sub")).getText();
+        //String actualMessage = driver.findElement(By.xpath("/html/body/div[1]/div/form/div[2]/span/span/span[3]")).getText();
         String expectedMessage = "Телефон указан неверно. Должно быть 11 цифр, например, +79012345678.";
         Assertions.assertEquals(expectedMessage, actualMessage.strip());
     }
 
+//    @Test //в слаке в комментарии, написали, что это ненадежный тест, делаю другой
+//    void CheckboxINotSelected() { //Когда не проставлена галочка, то в классе появляется еще поле input_invalid.(Нужно проверить, что оно появилось)
+//        driver.findElement(By.cssSelector("[name='name']")).sendKeys("Василий Петров-Иванов");
+//        driver.findElement(By.cssSelector("[name= 'phone']")).sendKeys("+79012345678");
+//        String actualElement = driver.findElement(By.cssSelector("[data-test-id='agreement']")).getAttribute("class");
+//        String expectedElement = "checkbox checkbox_size_m checkbox_theme_alfa-on-white";
+//        Assertions.assertEquals(expectedElement, actualElement.strip());
+//        driver.findElement(By.tagName("button")).click();
+//        String actualResultAfterClick = driver.findElement(By.cssSelector("[data-test-id='agreement']")).getAttribute("class");
+//        String expectedResultAfterClick = "checkbox checkbox_size_m checkbox_theme_alfa-on-white input_invalid";
+//        Assertions.assertEquals(actualResultAfterClick, expectedResultAfterClick.strip());
+//    }
+
     @Test
-    void CheckboxINotSelected() { //Когда не проставлена галочка, то в классе появляется еще поле input_invalid.(Нужно проверить, что оно появилось)
+    void CheckboxINotSelected() {
         driver.findElement(By.cssSelector("[name='name']")).sendKeys("Василий Петров-Иванов");
         driver.findElement(By.cssSelector("[name= 'phone']")).sendKeys("+79012345678");
         String actualElement = driver.findElement(By.cssSelector("[data-test-id='agreement']")).getAttribute("class");
-        String expectedElement = "checkbox checkbox_size_m checkbox_theme_alfa-on-white";
-        Assertions.assertEquals(expectedElement, actualElement.strip());
+        Assertions.assertFalse(actualElement.contains("input_invalid"));
         driver.findElement(By.tagName("button")).click();
         String actualResultAfterClick = driver.findElement(By.cssSelector("[data-test-id='agreement']")).getAttribute("class");
-        String expectedResultAfterClick = "checkbox checkbox_size_m checkbox_theme_alfa-on-white input_invalid";
-        Assertions.assertEquals(actualResultAfterClick, expectedResultAfterClick.strip());
+        Assertions.assertTrue(actualResultAfterClick.contains("input_invalid"));
     }
 
     @Test
@@ -114,8 +128,9 @@ public class WebTestCardAplicationStep1 {
         driver.findElement(By.cssSelector("[name= 'phone']")).sendKeys(" ");
         driver.findElement(By.className("checkbox__box")).click();
         driver.findElement(By.tagName("button")).click();
-        String actualResult = driver.findElement(By.xpath("/html/body/div[1]/div/form/div[1]/span/span/span[3]")).getText();
-        String expectedResult = "Поле обязательно для заполнения";
-        Assertions.assertEquals(expectedResult, actualResult.strip());
+        String actualMessage = driver.findElement(By.cssSelector("[data-test-id='name'] .input__sub")).getText();
+        //String actualMessage = driver.findElement(By.xpath("/html/body/div[1]/div/form/div[1]/span/span/span[3]")).getText();
+        String expectedMessage = "Поле обязательно для заполнения";
+        Assertions.assertEquals(expectedMessage, actualMessage.strip());
     }
 }
